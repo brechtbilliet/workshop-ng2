@@ -4,7 +4,7 @@
   "description": "My winecellar",
   "main": "index.js",
   "scripts": {
-    "foo": "echo bar"
+    "start": "webpack-dev-server --config webpack/webpack.dev.js --inline"
   },
   "author": "Brecht Billiet",
   "license": "MIT",
@@ -13,10 +13,23 @@
     "npm": ">= 3"
   },
   "devDependencies": {
+    "css-loader": "0.23.1",
+    "file-loader": "0.8.5",
+    "html-webpack-plugin": "2.15.0",
+    "open-browser-webpack-plugin": "0.0.2",
+    "raw-loader": "0.5.1",
+    "sass-loader": "3.2.0",
+    "style-loader": "0.13.1",
+    "ts-loader": "0.8.2",
     "typescript": "1.8.10",
-    "typings": "0.7.12"
+    "typings": "0.7.12",
+    "url-loader": "0.5.7",
+    "webpack": "1.12.15",
+    "webpack-dev-server": "1.14.1"
   },
   "dependencies": {
+    "bootstrap": "3.3.6",
+    "jquery": "2.2.3",
     "lodash": "4.0.0"
   }
 }
