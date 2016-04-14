@@ -1,10 +1,10 @@
 import {Title} from "angular2/src/platform/browser/title";
 import {Component} from "angular2/core";
 import {ROUTER_DIRECTIVES, RouteConfig} from "angular2/router";
-import {AboutPage} from "../../about/containers/about-page/about-page.container";
-import {EditStockPage} from "../../stock/containers/edit-stock-page/edit-stock-page.container";
-import {AddStockPage} from "../../stock/containers/add-stock-page/add-stock-page.container";
-import {StockPage} from "../../stock/containers/stock-page/stock-page.container";
+import {AboutPage} from "../../../about/containers/about-page/about-page.container.ts";
+import {EditStockPage} from "../../../stock/containers/edit-stock-page/edit-stock-page.container.ts";
+import {AddStockPage} from "../../../stock/containers/add-stock-page/add-stock-page.container.ts";
+import {StockPage} from "../../../stock/containers/stock-page/stock-page.container.ts";
 @Component({
     selector: "application",
     providers: [Title],
