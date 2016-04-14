@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "lodash": "github:typed-typings/npm-lodash#73a6037f16173baee0b40136eee07b2c7ad243c8"
+  }
+}
