@@ -6,10 +6,12 @@ import {EditStockPage} from "../../../stock/containers/edit-stock-page/edit-stoc
 import {AddStockPage} from "../../../stock/containers/add-stock-page/add-stock-page.container";
 import {StockPage} from "../../../stock/containers/stock-page/stock-page.container";
 import {Navbar} from "../../components/navbar/navbar.component";
+import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "toastr/build/toastr.css";
 import "font-awesome/css/font-awesome.css";
 import {Spinner} from "../../components/spinner/spinner.component";
+import {Account} from "../../../authentication/types/Account";
 @Component({
     selector: "application",
     providers: [Title],
@@ -17,7 +19,7 @@ import {Spinner} from "../../components/spinner/spinner.component";
     encapsulation: ViewEncapsulation.None,
     styles: [require("./application.container.scss")],
     template: `
-        <navbar></navbar>
+        <navbar [account]="account" (logout)="logout()"></navbar>
         <router-outlet></router-outlet>
         <spinner></spinner>
     `
@@ -32,5 +34,15 @@ import {Spinner} from "../../components/spinner/spinner.component";
 export class WineCellarApp {
     constructor(private title: Title) {
         this.title.setTitle("Winecellar application");
+    }
+
+    public account: Account = {
+        firstName: "Brecht",
+        lastName: "Billiet",
+        login: "brechtbilliet"
+    };
+
+    public logout(): void {
+        alert("log me out");
     }
 }

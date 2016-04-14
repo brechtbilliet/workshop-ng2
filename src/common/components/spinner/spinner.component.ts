@@ -3,7 +3,7 @@ import {Component} from "angular2/core";
     selector: "spinner",
     styles: [require("./spinner.component.scss")],
     template: `
-        <div class="spinner" [class.active]="true">
+        <div class="spinner active">
             <div class="bounce1"></div>
             <div class="bounce2"></div>
             <div class="bounce3"></div>
