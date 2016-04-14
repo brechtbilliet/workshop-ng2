@@ -1,0 +1,20 @@
+{
+  "name": "Winecellar",
+  "version": "1.0.0",
+  "description": "My winecellar",
+  "main": "index.js",
+  "scripts": {
+    "foo": "echo bar"
+  },
+  "author": "Brecht Billiet",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 4.2.1 <= 5",
+    "npm": ">= 3"
+  },
+  "devDependencies": {
+  },
+  "dependencies": {
+    "lodash": "4.0.0"
+  }
+}
