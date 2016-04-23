@@ -21,7 +21,7 @@ import {Account} from "../../../authentication/types/Account";
     template: `
         <navbar [account]="account" (logout)="logout()"></navbar>
         <router-outlet></router-outlet>
-        <spinner></spinner>
+        <spinner [spin]="true"></spinner>
     `
 })
 @RouteConfig([
