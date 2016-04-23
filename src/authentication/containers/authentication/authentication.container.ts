@@ -4,12 +4,15 @@ import {Login} from "../../components/login/login.component";
 import {Register} from "../../components/register/register.component";
 import {Account} from "../../types/Account";
 import {Credentials} from "../../types/Credentials";
+import {AuthenticationEndpoint} from "../../endpoints/authentication.endpoint";
 @Component({
     selector: "authentication",
     directives: [Login, Register, Panel],
+    providers: [AuthenticationEndpoint],
     template: `
        <div class="container">
            <panel [header]="'You need authentication'">
+           <button class="btn btn-danger" (click)="logout()">Logout</button>
                <login *ngIf="curTab === 0" (authenticate)="login($event)"></login>
                <register *ngIf="curTab === 1" (authenticate)="register($event)"></register>
                <a href="javascript:void(0)" (click)="enableTab(1)" *ngIf="curTab===0">I don't have an account yet</a>
@@ -21,8 +24,7 @@ import {Credentials} from "../../types/Credentials";
 export class Authentication {
     public curTab: number = 0;
 
-    constructor() {
-
+    constructor(private authenticationEndpoint: AuthenticationEndpoint) {
     }
 
     public enableTab(tabIndex: number): void {
@@ -30,10 +32,14 @@ export class Authentication {
     }
 
     public login(credentials: Credentials): void {
-        console.log(credentials);
+        this.authenticationEndpoint.authenticate(credentials);
     }
 
     public register(account: Account): void {
-        console.log(account);
+        this.authenticationEndpoint.register(account);
+    }
+
+    public logout(): void {
+        this.authenticationEndpoint.logout();
     }
 }

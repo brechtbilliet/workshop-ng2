@@ -20,9 +20,9 @@ import {Authentication} from "../../../authentication/containers/authentication/
     encapsulation: ViewEncapsulation.None,
     styles: [require("./application.container.scss")],
     template: `
-        <navbar [account]="account" (logout)="logout()"></navbar>
-        <authentication></authentication>
-        <router-outlet></router-outlet>
+        <navbar [account]="account" (logout)="logout()" *ngIf="isAuthenticated"></navbar>
+        <authentication *ngIf="!isAuthenticated"></authentication>
+        <router-outlet *ngIf="isAuthenticated"></router-outlet>
         <spinner></spinner>
     `
 })
@@ -34,6 +34,7 @@ import {Authentication} from "../../../authentication/containers/authentication/
     {path: "/about", name: "About", component: AboutPage}
 ])
 export class WineCellarApp {
+    public isAuthenticated: boolean = false;
     constructor(private title: Title) {
         this.title.setTitle("Winecellar application");
     }
