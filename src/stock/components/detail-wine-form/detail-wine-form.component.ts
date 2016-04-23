@@ -1,23 +1,21 @@
 import {Validators, Control, ControlGroup} from "angular2/common";
 import {EventEmitter, Output, Input, ChangeDetectionStrategy, Component} from "angular2/core";
 import {Wine} from "../../entities/Wine";
-import {FormGroupTextbox} from "../../../common/components/form/form-group-textbox/form-group-textbox.component";
 import {FormGroupTextarea} from "../../../common/components/form/form-group-textarea/form-group-textarea.component";
 import {FormGroupFooter} from "../../../common/components/form/form-group-footer/form-group-footer.component";
 import {NumberPicker} from "../../../common/components/number-picker/number-picker.component";
 import {Rating} from "../../../common/components/rating/rating.component";
 import {ROUTER_DIRECTIVES} from "angular2/router";
+import {Product} from "../../endpoints/WineComEndpoint";
+import {WineSearch} from "../../containers/wine-search/wine-search.container";
+import {FormGroupTextbox} from "../../../common/components/form/form-group-textbox/form-group-textbox.component";
 @Component({
     selector: "detail-wine-form",
     changeDetection: ChangeDetectionStrategy.OnPush,
-    directives: [FormGroupTextbox, FormGroupTextarea, FormGroupFooter, ROUTER_DIRECTIVES, Rating, NumberPicker],
+    directives: [FormGroupTextbox, WineSearch, FormGroupTextarea, FormGroupFooter, ROUTER_DIRECTIVES, Rating, NumberPicker],
     template: `
         <form [ngFormModel]="wineForm" class="form-horizontal col-sm-12" (ngSubmit)="onSubmit()">
-            <form-group-textbox 
-                [label]="'Name'" 
-                [control]="wineForm.controls['name']" 
-                [placeholder]="'Enter name'">
-            </form-group-textbox>    
+            <wine-search [control]="wineForm.controls['name']" (onSelect)="selectWine($event)"></wine-search>    
             <form-group-textarea 
                 [label]="'Description'" 
                 [control]="wineForm.controls['description']" 
@@ -97,5 +95,13 @@ export class DetailWineForm {
 
     public setInStock(inStock: number): void {
         this.wine.inStock = inStock;
+    }
+
+    public selectWine(wine: Product): void {
+        (<Control>this.wineForm.controls["name"]).updateValue(wine.name);
+        (<Control>this.wineForm.controls["description"]).updateValue(wine.description);
+        (<Control>this.wineForm.controls["price"]).updateValue(wine.priceRetail);
+        (<Control>this.wineForm.controls["region"]).updateValue(wine.appellation.region.name);
+        this.wine.image = wine.labels.length > 0 ? wine.labels[0].url : null;
     }
 }
