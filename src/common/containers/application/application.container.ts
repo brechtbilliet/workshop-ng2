@@ -11,21 +11,23 @@ import "bootstrap/dist/css/bootstrap.css";
 import "toastr/build/toastr.css";
 import "font-awesome/css/font-awesome.css";
 import {Spinner} from "../../components/spinner/spinner.component";
-import {Account} from "../../../authentication/types/Account";
 import {Authentication} from "../../../authentication/containers/authentication/authentication.container";
 import {AuthenticationEndpoint} from "../../../authentication/endpoints/authentication.endpoint";
 import {ApplicationState} from "../../state/ApplicationState";
 import {Store} from "@ngrx/store";
+import {AuthenticationDataState} from "../../state/DataState";
+import {Observable} from "rxjs/Observable";
+import {BusyHandlerService} from "../../services/busyHandler.service";
 @Component({
     selector: "application",
-    providers: [Title, AuthenticationEndpoint],
+    providers: [Title, AuthenticationEndpoint, BusyHandlerService],
     directives: [ROUTER_DIRECTIVES, Navbar, Spinner, Authentication],
     encapsulation: ViewEncapsulation.None,
     styles: [require("./application.container.scss")],
     template: `
-        <navbar [account]="account" (logout)="logout()" *ngIf="isAuthenticated"></navbar>
-        <authentication *ngIf="!isAuthenticated"></authentication>
-        <router-outlet *ngIf="isAuthenticated"></router-outlet>
+        <navbar [account]="(authentication$|async)?.account" (logout)="logout()" *ngIf="(authentication$|async)?.isAuthenticated"></navbar>
+        <authentication *ngIf="!(authentication$|async)?.isAuthenticated"></authentication>
+        <router-outlet *ngIf="(authentication$|async)?.isAuthenticated"></router-outlet>
         <spinner></spinner>
     `
 })
@@ -37,16 +39,12 @@ import {Store} from "@ngrx/store";
     {path: "/about", name: "About", component: AboutPage}
 ])
 export class WineCellarApp {
-    public isAuthenticated: boolean = false;
-    public account: Account;
+    public authentication$: Observable<AuthenticationDataState>
 
     constructor(private title: Title, private authenticationEndpoint: AuthenticationEndpoint, private store: Store<ApplicationState>) {
         this.title.setTitle("Winecellar application");
         this.authenticationEndpoint.checkInitialAuthentication();
-        this.store.subscribe((state: ApplicationState) => {
-            this.isAuthenticated = state.data.authentication.isAuthenticated;
-            this.account = state.data.authentication.account;
-        });
+        this.authentication$ = this.store.select((state: ApplicationState) => state.data.authentication);
     }
 
 
