@@ -1,11 +1,12 @@
-import {Component} from "angular2/core";
+import {Component, ChangeDetectionStrategy, Input} from "angular2/core";
 @Component({
     selector: "panel",
     styles: [require("./panel.component.scss")],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Fake header</h3>
+                <h3 class="panel-title">{{header}}</h3>
             </div>
             <div class="panel-body">
                 <ng-content></ng-content>
@@ -14,4 +15,6 @@ import {Component} from "angular2/core";
     `
 })
 export class Panel {
+    @Input()
+    public header: string;
 }
