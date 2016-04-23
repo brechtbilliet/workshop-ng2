@@ -5,9 +5,10 @@ import {CollapsableSidebar} from "../../../common/containers/collapsable-sidebar
 import {FavoriteWines} from "../../components/favorite-wines/favorite-wines.component";
 import {NumberPicker} from "../../../common/components/number-picker/number-picker.component";
 import {Rating} from "../../../common/components/rating/rating.component";
+import {Panel} from "../../../common/components/panel/panel.component";
 @Component({
     selector: "stock-page",
-    directives: [DefaultPage, Main, CollapsableSidebar, FavoriteWines, NumberPicker, Rating],
+    directives: [DefaultPage, Main, CollapsableSidebar, FavoriteWines, NumberPicker, Rating, Panel],
     template: `
         <default-page>
             <collapsable-sidebar class="hidden-sm hidden-xs">
@@ -17,8 +18,10 @@ import {Rating} from "../../../common/components/rating/rating.component";
                 <div class="row">
                     <div class="col-sm-12">
                         <h2><i class="fa fa-user"></i>&nbsp;My wines <span class="badge badge-primary">5</span></h2>
-                        <number-picker [amount]="5" (setAmount)="setAmount($event)"></number-picker>
-                        <rating [rating]="2" (setRate)="setRate($event)" big="true"></rating>
+                        <panel [header]="'Hi there!'">
+                            <number-picker [amount]="5" (setAmount)="setAmount($event)"></number-picker>
+                            <rating [rating]="2" (setRate)="setRate($event)" big="true"></rating>
+                        </panel>
                     </div>
                 </div>
             </main>
