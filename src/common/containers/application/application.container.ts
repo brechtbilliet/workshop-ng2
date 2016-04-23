@@ -13,9 +13,12 @@ import "font-awesome/css/font-awesome.css";
 import {Spinner} from "../../components/spinner/spinner.component";
 import {Account} from "../../../authentication/types/Account";
 import {Authentication} from "../../../authentication/containers/authentication/authentication.container";
+import {AuthenticationEndpoint} from "../../../authentication/endpoints/authentication.endpoint";
+import {ApplicationState} from "../../state/ApplicationState";
+import {Store} from "@ngrx/store";
 @Component({
     selector: "application",
-    providers: [Title],
+    providers: [Title, AuthenticationEndpoint],
     directives: [ROUTER_DIRECTIVES, Navbar, Spinner, Authentication],
     encapsulation: ViewEncapsulation.None,
     styles: [require("./application.container.scss")],
@@ -35,17 +38,19 @@ import {Authentication} from "../../../authentication/containers/authentication/
 ])
 export class WineCellarApp {
     public isAuthenticated: boolean = false;
-    constructor(private title: Title) {
+    public account: Account;
+
+    constructor(private title: Title, private authenticationEndpoint: AuthenticationEndpoint, private store: Store<ApplicationState>) {
         this.title.setTitle("Winecellar application");
+        this.authenticationEndpoint.checkInitialAuthentication();
+        this.store.subscribe((state: ApplicationState) => {
+            this.isAuthenticated = state.data.authentication.isAuthenticated;
+            this.account = state.data.authentication.account;
+        });
     }
 
-    public account: Account = {
-        firstName: "Brecht",
-        lastName: "Billiet",
-        login: "brechtbilliet"
-    };
 
     public logout(): void {
-        alert("log me out");
+        this.authenticationEndpoint.logout();
     }
 }

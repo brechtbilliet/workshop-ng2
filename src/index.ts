@@ -5,6 +5,7 @@ import {ROUTER_PROVIDERS, LocationStrategy, HashLocationStrategy, APP_BASE_HREF}
 import {provide} from "angular2/core";
 import {store} from "./common/store";
 import {provideStore, usePostMiddleware, usePreMiddleware, Middleware} from "@ngrx/store";
+import "rxjs/add/operator/do";
 
 const actionLog: Middleware = (action: any) => {
     return action.do((val: any) => {
