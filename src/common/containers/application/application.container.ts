@@ -28,7 +28,7 @@ import {BusyHandlerService} from "../../services/busyHandler.service";
         <navbar [account]="(authentication$|async)?.account" (logout)="logout()" *ngIf="(authentication$|async)?.isAuthenticated"></navbar>
         <authentication *ngIf="!(authentication$|async)?.isAuthenticated"></authentication>
         <router-outlet *ngIf="(authentication$|async)?.isAuthenticated"></router-outlet>
-        <spinner></spinner>
+        <spinner [spin]="isBusy$|async"></spinner>
     `
 })
 @RouteConfig([
@@ -39,12 +39,14 @@ import {BusyHandlerService} from "../../services/busyHandler.service";
     {path: "/about", name: "About", component: AboutPage}
 ])
 export class WineCellarApp {
-    public authentication$: Observable<AuthenticationDataState>
+    public authentication$: Observable<AuthenticationDataState>;
+    public isBusy$: Observable<boolean>;
 
     constructor(private title: Title, private authenticationEndpoint: AuthenticationEndpoint, private store: Store<ApplicationState>) {
         this.title.setTitle("Winecellar application");
         this.authenticationEndpoint.checkInitialAuthentication();
         this.authentication$ = this.store.select((state: ApplicationState) => state.data.authentication);
+        this.isBusy$ = this.store.select((state: ApplicationState) => state.containers.application.isBusy);
     }
 
 

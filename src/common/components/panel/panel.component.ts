@@ -1,8 +1,7 @@
-import {Component, ChangeDetectionStrategy, Input} from "angular2/core";
+import {Component, Input} from "angular2/core";
 @Component({
     selector: "panel",
     styles: [require("./panel.component.scss")],
-    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
         <div class="panel panel-primary">
             <div class="panel-heading">
