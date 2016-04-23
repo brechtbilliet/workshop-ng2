@@ -1,11 +1,12 @@
 import {Panel} from "../../../common/components/panel/panel.component";
 import {ControlGroup} from "angular2/common";
-import {Output, EventEmitter, Component} from "angular2/core";
+import {Output, EventEmitter, Component, ChangeDetectionStrategy} from "angular2/core";
 import {Credentials} from "../../types/Credentials";
 @Component({
     selector: "login",
     directives: [Panel],
     styles: [require("./login.component.scss")],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
            <h1>Login</h1>
            <button class="btn btn-primary" (click)="onSubmit()">Login</button>

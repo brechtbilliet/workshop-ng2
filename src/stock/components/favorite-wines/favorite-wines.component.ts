@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Output, Input} from "angular2/core";
+import {Component, EventEmitter, Output, Input, ChangeDetectionStrategy} from "angular2/core";
 import {ROUTER_DIRECTIVES} from "angular2/router";
 import * as _ from "lodash";
 import {Wine} from "../../entities/Wine";
@@ -6,6 +6,7 @@ import {NumberPicker} from "../../../common/components/number-picker/number-pick
 @Component({
     selector: "favorite-wines",
     directives: [NumberPicker, ROUTER_DIRECTIVES],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     styles: [require("./favorite-wines.component.scss")],
     template: `
        <div>

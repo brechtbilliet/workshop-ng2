@@ -1,10 +1,11 @@
 import {ROUTER_DIRECTIVES} from "angular2/router";
-import {Component, Output, EventEmitter, Input} from "angular2/core";
+import {Component, Output, EventEmitter, Input, ChangeDetectionStrategy} from "angular2/core";
 import {Account} from "../../../authentication/types/Account";
 @Component({
     selector: "navbar",
     directives: [ROUTER_DIRECTIVES],
     styles: [require("./navbar.component.scss")],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     template: `
       <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container-fluid">
