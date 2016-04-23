@@ -23,7 +23,7 @@ import {Authentication} from "../../../authentication/containers/authentication/
         <navbar [account]="account" (logout)="logout()" *ngIf="isAuthenticated"></navbar>
         <authentication *ngIf="!isAuthenticated"></authentication>
         <router-outlet *ngIf="isAuthenticated"></router-outlet>
-        <spinner></spinner>
+        <spinner [spin]="true"></spinner>
     `
 })
 @RouteConfig([
