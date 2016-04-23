@@ -12,14 +12,16 @@ import "toastr/build/toastr.css";
 import "font-awesome/css/font-awesome.css";
 import {Spinner} from "../../components/spinner/spinner.component";
 import {Account} from "../../../authentication/types/Account";
+import {Authentication} from "../../../authentication/containers/authentication/authentication.container";
 @Component({
     selector: "application",
     providers: [Title],
-    directives: [ROUTER_DIRECTIVES, Navbar, Spinner],
+    directives: [ROUTER_DIRECTIVES, Navbar, Spinner, Authentication],
     encapsulation: ViewEncapsulation.None,
     styles: [require("./application.container.scss")],
     template: `
         <navbar [account]="account" (logout)="logout()"></navbar>
+        <authentication></authentication>
         <router-outlet></router-outlet>
         <spinner></spinner>
     `
