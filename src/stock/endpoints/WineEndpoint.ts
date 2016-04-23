@@ -58,6 +58,11 @@ export class WineEndpoint {
         }, (resp: Response) => this.onError(resp));
     }
 
+    public fetchWine(id: string): Observable<Wine> {
+        return this.busyHandler.handle(this.http.get(API_URL + "/wines/" + id, this.getHttpOptions())
+            .map((res: Response) => res.json()));
+    }
+
     public setRate(wine: Wine, myRating: number): void {
         let newWine: Wine = <Wine> Object.assign({}, wine, {myRating: myRating});
         let obs$: Observable<any> = this.busyHandler.handle(

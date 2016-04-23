@@ -18,9 +18,10 @@ import {Store} from "@ngrx/store";
 import {AuthenticationDataState} from "../../state/DataState";
 import {Observable} from "rxjs/Observable";
 import {BusyHandlerService} from "../../services/busyHandler.service";
+import {WineEndpoint} from "../../../stock/endpoints/WineEndpoint";
 @Component({
     selector: "application",
-    providers: [Title, AuthenticationEndpoint, BusyHandlerService],
+    providers: [Title, AuthenticationEndpoint, WineEndpoint, BusyHandlerService],
     directives: [ROUTER_DIRECTIVES, Navbar, Spinner, Authentication],
     encapsulation: ViewEncapsulation.None,
     styles: [require("./application.container.scss")],
@@ -42,11 +43,17 @@ export class WineCellarApp {
     public authentication$: Observable<AuthenticationDataState>;
     public isBusy$: Observable<boolean>;
 
-    constructor(private title: Title, private authenticationEndpoint: AuthenticationEndpoint, private store: Store<ApplicationState>) {
+    constructor(private wineEndpoint: WineEndpoint, private title: Title,
+                private authenticationEndpoint: AuthenticationEndpoint, private store: Store<ApplicationState>) {
         this.title.setTitle("Winecellar application");
         this.authenticationEndpoint.checkInitialAuthentication();
         this.authentication$ = this.store.select((state: ApplicationState) => state.data.authentication);
         this.isBusy$ = this.store.select((state: ApplicationState) => state.containers.application.isBusy);
+        this.authentication$.subscribe((authenticationDataState: AuthenticationDataState) => {
+            if (authenticationDataState.isAuthenticated) {
+                this.wineEndpoint.load();
+            }
+        })
     }
 
 

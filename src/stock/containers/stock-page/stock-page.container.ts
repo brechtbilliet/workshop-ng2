@@ -62,7 +62,6 @@ export class StockPage implements OnInit {
     public numberOfWines$: Observable<Number>;
 
     constructor(private el: ElementRef, private store: Store<ApplicationState>, private wineEndpoint: WineEndpoint) {
-        this.wineEndpoint.load();
         this.wines$ = this.store.select((state: ApplicationState) => state.data.wines);
     }
 
