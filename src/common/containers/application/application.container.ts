@@ -53,9 +53,8 @@ export class WineCellarApp {
             if (authenticationDataState.isAuthenticated) {
                 this.wineEndpoint.load();
             }
-        })
+        });
     }
-
 
     public logout(): void {
         this.authenticationEndpoint.logout();

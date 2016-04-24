@@ -8,22 +8,7 @@ var API_KEY = process.env.npm_config_apikey;
 module.exports = {
     entry: {
         app: './src/index.ts',
-        vendor: [
-            'jquery',
-            'angular2/core',
-            'angular2/platform/browser',
-            'angular2/http',
-            'angular2/common',
-            'angular2/router',
-            '@ngrx/store',
-            'toastr',
-            'toastr/build/toastr.css',
-            'font-awesome/css/font-awesome.css',
-            'bootstrap/dist/css/bootstrap.css',
-            'bootstrap',
-            'rxjs',
-            'lodash'
-        ]
+        vendor: './src/vendor.ts'
     },
     output: {
         filename: './dev/[name].bundle.js',
@@ -41,7 +26,7 @@ module.exports = {
         extensions: ['', '.ts', '.js', '.json']
     },
     debug: true,
-    // devtool: 'cheap-module-eval-source-map',
+    devtool: 'cheap-module-eval-source-map',
     plugins: [
         new StringReplacePlugin(),
         new HtmlWebpackPlugin({

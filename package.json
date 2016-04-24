@@ -4,7 +4,7 @@
   "description": "My winecellar",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server --config webpack/webpack.dev.js --inline"
+    "start": "webpack-dev-server --config webpack/webpack.dev.js  --progress --profile --colors --inline --watch"
   },
   "author": "Brecht Billiet",
   "license": "MIT",
