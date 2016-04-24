@@ -1,7 +1,7 @@
-import {Component, Input, Output, EventEmitter, ElementRef, OnDestroy} from "angular2/core";
-import {WineComEndpoint, Product, WineComSearchResult} from "../../endpoints/WineComEndpoint";
+import {Component, Input, Output, EventEmitter, OnDestroy} from "angular2/core";
+import {WineComEndpoint, Product, WineComSearchResult} from "../../endpoints/wineCom.endpoint";
 import {Control} from "angular2/common";
-import {Observable, Subject} from "rxjs";
+import {Subject} from "rxjs";
 import {Subscription} from "rxjs/Subscription";
 
 @Component({
@@ -10,7 +10,7 @@ import {Subscription} from "rxjs/Subscription";
     providers: [WineComEndpoint],
     template: `
         <div class="form-group has-feedback" [class.has-success]="control.valid">
-            <label for="loginInput" class="col-sm-4 control-label">
+            <label for="searchInput" class="col-sm-4 control-label">
                 Name (*)
             </label>
             <div class="col-sm-8">
@@ -41,7 +41,7 @@ export class WineSearch implements OnDestroy {
     public foundWines$: Subject<Array<Product>> = new Subject();
     private subscriptions: Array<Subscription> = [];
 
-    constructor(private el: ElementRef, private wineComEndpoint: WineComEndpoint) {
+    constructor(private wineComEndpoint: WineComEndpoint) {
         this.onSelect = new EventEmitter();
     }
 
@@ -55,7 +55,7 @@ export class WineSearch implements OnDestroy {
     }
 
     public ngOnInit(): void {
-        let subscription: Subscription = Observable.fromEvent(this.el.nativeElement.querySelector("input"), "keyup")
+        let subscription: Subscription = this.control.valueChanges
             .map((e: any) => e.target.value)
             .do((value: string) => {
                 if (value.length < 3) {

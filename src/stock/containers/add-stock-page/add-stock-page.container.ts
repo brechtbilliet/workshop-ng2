@@ -1,14 +1,14 @@
 import {Component} from "angular2/core";
 import {Main} from "../../../common/components/main/main.component";
 import {DefaultPage} from "../../../common/components/default-page/default-page.component";
-import {WineEndpoint} from "../../endpoints/WineEndpoint";
 import {DetailWineForm} from "../../components/detail-wine-form/detail-wine-form.component";
 import {Router} from "angular2/router";
 import {Wine} from "../../entities/Wine";
+import {WineResource} from "../../resources/wine.resource";
 @Component({
     selector: "add-stock-page",
     directives: [DetailWineForm, DefaultPage, Main],
-    providers: [WineEndpoint],
+    providers: [WineResource],
     template: `
         <default-page>
             <main>
@@ -25,12 +25,12 @@ import {Wine} from "../../entities/Wine";
   `
 })
 export class AddStockPage {
-    constructor(private wineEndpoint: WineEndpoint,
+    constructor(private wineResource: WineResource,
                 private router: Router) {
     }
 
     public onSave(wine: Wine): void {
-        this.wineEndpoint.add(wine);
+        this.wineResource.add(wine);
         this.router.navigateByUrl("/stock");
     }
 }

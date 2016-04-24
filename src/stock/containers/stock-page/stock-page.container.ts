@@ -1,30 +1,29 @@
-import {Component, OnInit, ElementRef} from "angular2/core";
+import {Component, OnInit} from "angular2/core";
 import {DefaultPage} from "../../../common/components/default-page/default-page.component";
 import {Main} from "../../../common/components/main/main.component";
 import {CollapsableSidebar} from "../../../common/containers/collapsable-sidebar/collapsable-sidebar.container";
 import {FavoriteWines} from "../../components/favorite-wines/favorite-wines.component";
-import {ApplicationState} from "../../../common/state/ApplicationState";
-import {Store} from "@ngrx/store";
-import {WineEndpoint} from "../../endpoints/WineEndpoint";
 import {Wine} from "../../entities/Wine";
 import {Observable} from "rxjs/Observable";
 import {WineResults} from "../../components/wine-results/wine-results.component";
 import * as _ from "lodash";
 import {ROUTER_DIRECTIVES} from "angular2/router";
+import {Control} from "angular2/common";
+import {WineResource} from "../../resources/wine.resource";
 @Component({
     selector: "stock-page",
-    providers: [WineEndpoint],
+    providers: [WineResource],
     directives: [ROUTER_DIRECTIVES, DefaultPage, Main, CollapsableSidebar, FavoriteWines, WineResults],
     template: `
         <default-page>
             <collapsable-sidebar class="hidden-sm hidden-xs">
-                 <favorite-wines (onSetStock)="onSetStock($event)" [wines]="wines$ | async"></favorite-wines>
+                 <favorite-wines (onSetStock)="onSetStock($event)" [wines]="wineResource.wines$ | async"></favorite-wines>
             </collapsable-sidebar>
             <main>
                 <div class="row">
                     <div class="col-sm-8">
                         <div class="input-group">
-                            <input type="text" class="form-control input-lg"/>
+                            <input type="text" class="form-control input-lg" [ngFormControl]="searchCtrl"/>
                             <span class="input-group-addon"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
@@ -57,38 +56,34 @@ import {ROUTER_DIRECTIVES} from "angular2/router";
      `
 })
 export class StockPage implements OnInit {
-    public wines$: Observable<Array<Wine>>;
     public matchingWines$: Observable<Array<Wine>>;
     public numberOfWines$: Observable<Number>;
+    public searchCtrl: Control = new Control("");
 
-    constructor(private el: ElementRef, private store: Store<ApplicationState>, private wineEndpoint: WineEndpoint) {
-        this.wines$ = this.store.select((state: ApplicationState) => state.data.wines);
+    constructor(public wineResource: WineResource) {
     }
 
     public remove(wine: Wine): void {
-        this.wineEndpoint.remove(wine);
+        this.wineResource.remove(wine);
     }
 
     public onSetRate(item: any): void {
-        this.wineEndpoint.setRate(item.wine, item.value);
+        this.wineResource.setRate(item.wine, item.value);
     }
 
     public onSetStock(item: any): void {
-        this.wineEndpoint.setStock(item.wine, item.value);
+        this.wineResource.setStock(item.wine, item.value);
     }
 
     public ngOnInit(): void {
-        let input$: Observable<string> = Observable.fromEvent(this.el.nativeElement.querySelector("input"), "keyup")
-            .map((e: any) => e.target.value).startWith("");
-
-        this.matchingWines$ = Observable.combineLatest(input$, this.wines$)
+        this.matchingWines$ = Observable.combineLatest(this.searchCtrl.valueChanges.startWith(""), this.wineResource.wines$)
             .map((resp: [string, Array<Wine>]) => {
-                return resp[1].filter((wine: Wine) => wine.name.toLowerCase().indexOf(resp[0].toLowerCase()) > -1);
+                let term: string = resp[0];
+                let wines: Array<Wine> = resp[1];
+                return wines.filter((wine: Wine) => wine.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
             });
-        this.numberOfWines$ = this.wines$.map((wines: Array<Wine>) => {
-            return _.sumBy(wines, (wine: Wine) => {
-                return wine.inStock;
-            });
+        this.numberOfWines$ = this.wineResource.wines$.map((wines: Array<Wine>) => {
+            return _.sumBy(wines, (wine: Wine) => wine.inStock);
         });
     }
 }

@@ -2,17 +2,15 @@ import {Component, OnDestroy} from "angular2/core";
 import {Main} from "../../../common/components/main/main.component";
 import {DefaultPage} from "../../../common/components/default-page/default-page.component";
 import {ROUTER_DIRECTIVES, RouteParams, Router} from "angular2/router";
-import {WineEndpoint} from "../../endpoints/WineEndpoint";
 import {DetailWineForm} from "../../components/detail-wine-form/detail-wine-form.component";
 import {Observable} from "rxjs/Observable";
 import {Subscription} from "rxjs/Subscription";
-import {Store} from "@ngrx/store";
 import {Wine} from "../../entities/Wine";
-import {ApplicationState} from "../../../common/state/ApplicationState";
-import {CONTAINER_EDITSTOCKPAGE_CLEAR_WINE, CONTAINER_EDITSTOCKPAGE_SET_WINE} from "../../../common/actionTypes";
+import {WineResource} from "../../resources/wine.resource";
+import {EditStockPageModel} from "../../models/editStockPage.model";
 @Component({
     selector: "add-stock-page",
-    providers: [WineEndpoint],
+    providers: [WineResource, EditStockPageModel],
     directives: [ROUTER_DIRECTIVES, DetailWineForm, DefaultPage, Main],
     template: `
     <default-page>
@@ -23,7 +21,7 @@ import {CONTAINER_EDITSTOCKPAGE_CLEAR_WINE, CONTAINER_EDITSTOCKPAGE_SET_WINE} fr
                 </div>
              </div>
              <div class="row">
-                <detail-wine-form [wine]="wine$|async" *ngIf="wine$|async" (onSave)="onSave($event)"></detail-wine-form>
+                <detail-wine-form [wine]="editWine$|async" *ngIf="editWine$|async" (onSave)="onSave($event)"></detail-wine-form>
             </div>
         </main>
     </default-page>
@@ -31,17 +29,17 @@ import {CONTAINER_EDITSTOCKPAGE_CLEAR_WINE, CONTAINER_EDITSTOCKPAGE_SET_WINE} fr
      `
 })
 export class EditStockPage implements OnDestroy {
-    public wine$: Observable<Wine>;
+    public editWine$: Observable<Wine>;
     public subscriptions: Array<Subscription> = [];
 
-    constructor(private routeParams: RouteParams,
-                private store: Store<ApplicationState>,
-                private wineEndpoint: WineEndpoint,
+    constructor(public model: EditStockPageModel,
+                private routeParams: RouteParams,
+                private wineEndpoint: WineResource,
                 private router: Router) {
+        this.editWine$ = this.model.editWine$;
         this.subscriptions.push(this.wineEndpoint.fetchWine(routeParams.get("id")).subscribe((wine: Wine) => {
-            this.store.dispatch({type: CONTAINER_EDITSTOCKPAGE_SET_WINE, payload: wine});
+            this.model.setWine(wine);
         }));
-        this.wine$ = this.store.select((state: ApplicationState) => state.containers.editStockPage.wine);
     }
 
     public onSave(wine: Wine): void {
@@ -50,7 +48,7 @@ export class EditStockPage implements OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.store.dispatch({type: CONTAINER_EDITSTOCKPAGE_CLEAR_WINE});
+        this.model.clearWine();
         this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
     }
 }

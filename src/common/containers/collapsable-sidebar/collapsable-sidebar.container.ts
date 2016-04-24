@@ -1,28 +1,24 @@
 import {Component} from "angular2/core";
-import {Observable} from "rxjs/Observable";
-import {ApplicationState} from "../../state/ApplicationState";
-import {CONTAINER_COLLAPSABLESIDEBAR_TOGGLE} from "../../actionTypes";
-import {Store} from "@ngrx/store";
+import {CollapsableSidebarModel} from "../../models/collapsableSidebar.model";
 @Component({
     selector: "collapsable-sidebar",
+    providers: [CollapsableSidebarModel],
     styles: [require("./collapsable-sidebar.container.scss")],
     template: `
-        <div class="collapsable-part" [class.is-collapsed]="isCollapsed$|async">
+        <div class="collapsable-part" [class.is-collapsed]="model.isCollapsed$|async">
             <button class="btn btn-primary btn-collapsable" (click)="toggleSidebar()">
-                <i class="fa" [class.fa-chevron-right]="isCollapsed$| async" [class.fa-chevron-left]="(isCollapsed$| async) === false"></i>
+                <i class="fa" [class.fa-chevron-right]="model.isCollapsed$| async" 
+                    [class.fa-chevron-left]="(model.isCollapsed$| async) === false"></i>
             </button>
-            <ng-content *ngIf="(isCollapsed$| async) === false"></ng-content>
+            <ng-content *ngIf="(model.isCollapsed$| async) === false"></ng-content>
         </div>
     `
 })
 export class CollapsableSidebar {
-    public isCollapsed$: Observable<boolean>;
-
-    constructor(private store: Store<ApplicationState>) {
-        this.isCollapsed$ = store.select((state: ApplicationState) => state.containers.collapsableSidebar.isCollapsed);
+    constructor(public model: CollapsableSidebarModel) {
     }
 
     public toggleSidebar(): void {
-        this.store.dispatch({type: CONTAINER_COLLAPSABLESIDEBAR_TOGGLE});
+        this.model.toggle();
     }
 }

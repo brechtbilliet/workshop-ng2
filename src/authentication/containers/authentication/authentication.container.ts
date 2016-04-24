@@ -4,11 +4,11 @@ import {Login} from "../../components/login/login.component";
 import {Register} from "../../components/register/register.component";
 import {Account} from "../../types/Account";
 import {Credentials} from "../../types/Credentials";
-import {AuthenticationEndpoint} from "../../endpoints/authentication.endpoint";
+import {AuthenticationResource} from "../../resources/authentication.resource.ts";
 @Component({
     selector: "authentication",
     directives: [Login, Register, Panel],
-    providers: [AuthenticationEndpoint],
+    providers: [AuthenticationResource],
     template: `
        <div class="container">
            <panel [header]="'You need authentication'">
@@ -23,7 +23,7 @@ import {AuthenticationEndpoint} from "../../endpoints/authentication.endpoint";
 export class Authentication {
     public curTab: number = 0;
 
-    constructor(private authenticationEndpoint: AuthenticationEndpoint) {
+    constructor(private authenticationResource: AuthenticationResource) {
     }
 
     public enableTab(tabIndex: number): void {
@@ -31,10 +31,10 @@ export class Authentication {
     }
 
     public login(credentials: Credentials): void {
-        this.authenticationEndpoint.authenticate(credentials);
+        this.authenticationResource.authenticate(credentials);
     }
 
     public register(account: Account): void {
-        this.authenticationEndpoint.register(account);
+        this.authenticationResource.register(account);
     }
 }

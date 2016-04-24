@@ -6,7 +6,7 @@ import {FormGroupFooter} from "../../../common/components/form/form-group-footer
 import {NumberPicker} from "../../../common/components/number-picker/number-picker.component";
 import {Rating} from "../../../common/components/rating/rating.component";
 import {ROUTER_DIRECTIVES} from "angular2/router";
-import {Product} from "../../endpoints/WineComEndpoint";
+import {Product} from "../../endpoints/wineCom.endpoint";
 import {WineSearch} from "../../containers/wine-search/wine-search.container";
 import {FormGroupTextbox} from "../../../common/components/form/form-group-textbox/form-group-textbox.component";
 @Component({
