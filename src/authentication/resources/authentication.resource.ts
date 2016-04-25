@@ -13,13 +13,10 @@ import {
 import {ApplicationState} from "../../common/state/ApplicationState";
 import {BusyHandlerService} from "../../common/services/busyHandler.service";
 import {Observable} from "rxjs/Observable";
-import {AuthenticationDataState} from "../../common/state/DataState";
 
 @Injectable()
 export class AuthenticationResource {
-    public authentication$: Observable<AuthenticationDataState>;
     constructor(private busyHandler: BusyHandlerService, private http: Http, private store: Store<ApplicationState>) {
-        this.authentication$ = this.store.select((state: ApplicationState) => state.data.authentication);
     }
 
     public authenticate(credentials: Credentials): void {

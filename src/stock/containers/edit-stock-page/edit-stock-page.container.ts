@@ -4,13 +4,12 @@ import {DefaultPage} from "../../../common/components/default-page/default-page.
 import {ROUTER_DIRECTIVES, RouteParams, Router} from "angular2/router";
 import {DetailWineForm} from "../../components/detail-wine-form/detail-wine-form.component";
 import {Observable} from "rxjs/Observable";
-import {Subscription} from "rxjs/Subscription";
 import {Wine} from "../../entities/Wine";
 import {WineResource} from "../../resources/wine.resource";
-import {EditStockPageModel} from "../../models/editStockPage.model";
+import {EditStockPageSandbox} from "../../sandboxes/edit-stock-page.sandbox";
 @Component({
     selector: "add-stock-page",
-    providers: [WineResource, EditStockPageModel],
+    providers: [WineResource, EditStockPageSandbox],
     directives: [ROUTER_DIRECTIVES, DetailWineForm, DefaultPage, Main],
     template: `
     <default-page>
@@ -25,30 +24,23 @@ import {EditStockPageModel} from "../../models/editStockPage.model";
             </div>
         </main>
     </default-page>
-   
      `
 })
 export class EditStockPage implements OnDestroy {
-    public editWine$: Observable<Wine>;
-    public subscriptions: Array<Subscription> = [];
+    public editWine$: Observable<Wine> = this.sandbox.editWine$;
 
-    constructor(public model: EditStockPageModel,
+    constructor(public sandbox: EditStockPageSandbox,
                 private routeParams: RouteParams,
-                private wineEndpoint: WineResource,
                 private router: Router) {
-        this.editWine$ = this.model.editWine$;
-        this.subscriptions.push(this.wineEndpoint.fetchWine(routeParams.get("id")).subscribe((wine: Wine) => {
-            this.model.setWine(wine);
-        }));
+        this.sandbox.fetchWine(this.routeParams.get("id"));
     }
 
     public onSave(wine: Wine): void {
-        this.wineEndpoint.update(this.routeParams.get("id"), wine);
+        this.sandbox.updateWine(this.routeParams.get("id"), wine);
         this.router.navigateByUrl("/stock");
     }
 
     public ngOnDestroy(): void {
-        this.model.clearWine();
-        this.subscriptions.forEach((sub: Subscription) => sub.unsubscribe());
+        this.sandbox.clearWine();
     }
 }

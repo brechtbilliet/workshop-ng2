@@ -5,14 +5,14 @@ import {Store} from "@ngrx/store";
 import {CONTAINER_COLLAPSABLESIDEBAR_TOGGLE} from "../actionTypes";
 
 @Injectable()
-export class CollapsableSidebarModel {
-    public isCollapsed$: Observable<boolean>;
+export class CollapsableSidebarSandbox {
+    public isCollapsed$: Observable<boolean> =
+        this.store.select((state: ApplicationState) => state.containers.collapsableSidebar.isCollapsed);
 
     constructor(private store: Store<ApplicationState>) {
-        this.isCollapsed$ = this.store.select((state: ApplicationState) => state.containers.collapsableSidebar.isCollapsed);
     }
 
-    public toggle(): void {
+    public toggleSidebar(): void {
         this.store.dispatch({type: CONTAINER_COLLAPSABLESIDEBAR_TOGGLE});
     }
 }

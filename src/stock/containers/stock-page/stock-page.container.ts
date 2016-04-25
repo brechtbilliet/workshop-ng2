@@ -10,14 +10,16 @@ import * as _ from "lodash";
 import {ROUTER_DIRECTIVES} from "angular2/router";
 import {Control} from "angular2/common";
 import {WineResource} from "../../resources/wine.resource";
+import {StockPageSandbox} from "../../sandboxes/stock-page.sandbox";
 @Component({
     selector: "stock-page",
-    providers: [WineResource],
+    providers: [WineResource, StockPageSandbox],
     directives: [ROUTER_DIRECTIVES, DefaultPage, Main, CollapsableSidebar, FavoriteWines, WineResults],
     template: `
         <default-page>
             <collapsable-sidebar class="hidden-sm hidden-xs">
-                 <favorite-wines (onSetStock)="onSetStock($event)" [wines]="wineResource.wines$ | async"></favorite-wines>
+                <favorite-wines (onSetStock)="onSetStock($event)" [wines]="wines$ | async">
+                </favorite-wines>
             </collapsable-sidebar>
             <main>
                 <div class="row">
@@ -45,7 +47,7 @@ import {WineResource} from "../../resources/wine.resource";
                     <div class="col-sm-12">
                         <wine-results 
                             [wines]="matchingWines$| async" 
-                            (onRemove)="remove($event)" 
+                            (onRemove)="onRemove($event)" 
                             (onSetRate)="onSetRate($event)" 
                             (onSetStock)="onSetStock($event)">
                         </wine-results>
@@ -57,33 +59,33 @@ import {WineResource} from "../../resources/wine.resource";
 })
 export class StockPage implements OnInit {
     public matchingWines$: Observable<Array<Wine>>;
-    public numberOfWines$: Observable<Number>;
+    public wines$: Observable<Array<Wine>> = this.sandbox.wines$;
+    public numberOfWines$: Observable<Number> = this.wines$.map((wines: Array<Wine>) => {
+        return _.sumBy(wines, (wine: Wine) => wine.inStock);
+    });
     public searchCtrl: Control = new Control("");
 
-    constructor(public wineResource: WineResource) {
+    constructor(public sandbox: StockPageSandbox) {
     }
 
-    public remove(wine: Wine): void {
-        this.wineResource.remove(wine);
+    public onRemove(wine: Wine): void {
+        this.sandbox.removeWine(wine);
     }
 
     public onSetRate(item: any): void {
-        this.wineResource.setRate(item.wine, item.value);
+        this.sandbox.setRate(item.wine, item.value);
     }
 
     public onSetStock(item: any): void {
-        this.wineResource.setStock(item.wine, item.value);
+        this.sandbox.setStock(item.wine, item.value);
     }
 
     public ngOnInit(): void {
-        this.matchingWines$ = Observable.combineLatest(this.searchCtrl.valueChanges.startWith(""), this.wineResource.wines$)
+        this.matchingWines$ = Observable.combineLatest(this.searchCtrl.valueChanges.startWith(""), this.wines$)
             .map((resp: [string, Array<Wine>]) => {
                 let term: string = resp[0];
                 let wines: Array<Wine> = resp[1];
                 return wines.filter((wine: Wine) => wine.name.toLowerCase().indexOf(term.toLowerCase()) > -1);
             });
-        this.numberOfWines$ = this.wineResource.wines$.map((wines: Array<Wine>) => {
-            return _.sumBy(wines, (wine: Wine) => wine.inStock);
-        });
     }
 }

@@ -19,10 +19,8 @@ import {Observable} from "rxjs";
 
 @Injectable()
 export class WineResource {
-    public wines$: Observable<Array<Wine>>;
     constructor(private store: Store<ApplicationState>, private busyHandler: BusyHandlerService,
                 private http: Http) {
-        this.wines$ = this.store.select((state: ApplicationState) => state.data.wines);
     }
 
     public add(wine: Wine): void {
