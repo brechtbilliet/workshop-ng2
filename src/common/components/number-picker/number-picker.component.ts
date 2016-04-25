@@ -14,11 +14,9 @@ import {Component, Input, Output, EventEmitter, ChangeDetectionStrategy} from "a
     `
 })
 export class NumberPicker {
-    @Input()
-    public amount: number;
+    @Input() public amount: number;
 
-    @Output()
-    public setAmount: EventEmitter<number>;
+    @Output() public setAmount: EventEmitter<number>;
 
     constructor() {
         this.setAmount = new EventEmitter();

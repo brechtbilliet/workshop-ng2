@@ -63,11 +63,9 @@ import {FormGroupTextbox} from "../../../common/components/form/form-group-textb
      `
 })
 export class DetailWineForm {
-    @Output()
-    public onSave: EventEmitter<Wine>;
+    @Output() public onSave: EventEmitter<Wine>;
 
-    @Input()
-    public wine: Wine;
+    @Input() public wine: Wine;
 
     public wineForm: ControlGroup;
 

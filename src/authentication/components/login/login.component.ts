@@ -27,8 +27,7 @@ import {FormGroupTextbox} from "../../../common/components/form/form-group-textb
 export class Login {
     public loginForm: ControlGroup;
 
-    @Output()
-    public authenticate: EventEmitter<Credentials>;
+    @Output() public authenticate: EventEmitter<Credentials>;
 
     constructor() {
         this.authenticate = new EventEmitter();

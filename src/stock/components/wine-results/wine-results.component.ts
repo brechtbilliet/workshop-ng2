@@ -49,17 +49,11 @@ import {NumberPicker} from "../../../common/components/number-picker/number-pick
     `
 })
 export class WineResults {
-    @Input()
-    public wines: Array<Wine>;
+    @Input() public wines: Array<Wine>;
 
-    @Output()
-    public onRemove: EventEmitter<Wine>;
-
-    @Output()
-    public onSetRate: EventEmitter<any>;
-
-    @Output()
-    public onSetStock: EventEmitter<any>;
+    @Output() public onRemove: EventEmitter<Wine>;
+    @Output() public onSetRate: EventEmitter<any>;
+    @Output() public onSetStock: EventEmitter<any>;
 
     constructor() {
         this.onRemove = new EventEmitter();

@@ -48,11 +48,9 @@ import {Account} from "../../../authentication/types/Account";
         </nav>`
 })
 export class Navbar {
-    @Output()
-    public logout: EventEmitter<any>;
+    @Output() public logout: EventEmitter<any>;
 
-    @Input()
-    public account: Account;
+    @Input() public account: Account;
 
     constructor() {
         this.logout = new EventEmitter();

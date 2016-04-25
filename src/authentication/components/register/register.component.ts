@@ -50,10 +50,9 @@ import {FormGroupTextbox} from "../../../common/components/form/form-group-textb
        `
 })
 export class Register {
-    public registerForm: ControlGroup;
+    @Output() public authenticate: EventEmitter<Account>;
 
-    @Output()
-    public authenticate: EventEmitter<Account>;
+    public registerForm: ControlGroup;
 
     constructor() {
         this.authenticate = new EventEmitter();

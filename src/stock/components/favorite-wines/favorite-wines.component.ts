@@ -26,11 +26,9 @@ import {NumberPicker} from "../../../common/components/number-picker/number-pick
     `
 })
 export class FavoriteWines {
-    @Output()
-    public onSetStock: EventEmitter<any>;
+    @Output() public onSetStock: EventEmitter<any>;
 
-    @Input()
-    public wines: Array<Wine>;
+    @Input() public wines: Array<Wine>;
 
     constructor() {
         this.onSetStock = new EventEmitter();

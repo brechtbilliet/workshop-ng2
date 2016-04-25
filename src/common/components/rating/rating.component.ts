@@ -13,14 +13,10 @@ import {Component, EventEmitter, Output, Input, ChangeDetectionStrategy} from "a
     `
 })
 export class Rating {
-    @Input()
-    public rating: number;
+    @Input() public rating: number;
+    @Input() public big: boolean;
 
-    @Input()
-    public big: boolean;
-
-    @Output()
-    public setRate: EventEmitter<number>;
+    @Output() public setRate: EventEmitter<number>;
 
     public overValue: number;
 

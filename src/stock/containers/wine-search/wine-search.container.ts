@@ -34,11 +34,9 @@ import {WineSearchSandbox} from "../../sandboxes/wine-search.sandbox";
     `
 })
 export class WineSearch implements OnDestroy {
-    @Input()
-    public control: Control;
+    @Input() public control: Control;
 
-    @Output()
-    public onSelect: EventEmitter<Product>;
+    @Output()public onSelect: EventEmitter<Product>;
 
     public foundWines$: Subject<Array<Product>> = new Subject();
     private subscriptions: Array<Subscription> = [];
