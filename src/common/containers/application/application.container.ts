@@ -5,23 +5,19 @@ import {AboutPage} from "../../../about/containers/about-page/about-page.contain
 import {EditStockPage} from "../../../stock/containers/edit-stock-page/edit-stock-page.container";
 import {AddStockPage} from "../../../stock/containers/add-stock-page/add-stock-page.container";
 import {StockPage} from "../../../stock/containers/stock-page/stock-page.container";
-import {Navbar} from "../../components/navbar/navbar.component";
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 import "toastr/build/toastr.css";
 import "font-awesome/css/font-awesome.css";
-import {Spinner} from "../../components/spinner/spinner.component";
 import {Account} from "../../../authentication/types/Account";
 @Component({
     selector: "application",
     providers: [Title],
-    directives: [ROUTER_DIRECTIVES, Navbar, Spinner],
+    directives: [ROUTER_DIRECTIVES],
     encapsulation: ViewEncapsulation.None,
     styles: [require("./application.container.scss")],
     template: `
-        <navbar [account]="account" (logout)="logout()"></navbar>
         <router-outlet></router-outlet>
-        <spinner [spin]="true"></spinner>
     `
 })
 @RouteConfig([
