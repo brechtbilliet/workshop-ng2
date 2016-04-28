@@ -1,5 +1,5 @@
 import {Title} from "angular2/src/platform/browser/title";
-import {Component, ViewEncapsulation} from "angular2/core";
+import {Component, ViewEncapsulation, OnDestroy} from "angular2/core";
 import {ROUTER_DIRECTIVES, RouteConfig} from "angular2/router";
 import {AboutPage} from "../../../about/containers/about-page/about-page.container";
 import {EditStockPage} from "../../../stock/containers/edit-stock-page/edit-stock-page.container";
@@ -16,11 +16,13 @@ import {AuthenticationEndpoint} from "../../../authentication/endpoints/authenti
 import {ApplicationState} from "../../state/ApplicationState";
 import {Store} from "@ngrx/store";
 import {AuthenticationDataState} from "../../state/DataState";
-import {Observable} from "rxjs/Observable";
+import {Observable} from "rxjs";
 import {BusyHandlerService} from "../../services/busyHandler.service";
+import {WineEndpoint} from "../../../stock/endpoints/wine.endpoint";
+import {Subscription} from "rxjs/Subscription";
 @Component({
     selector: "application",
-    providers: [Title, AuthenticationEndpoint, BusyHandlerService],
+    providers: [Title, AuthenticationEndpoint, BusyHandlerService, WineEndpoint],
     directives: [ROUTER_DIRECTIVES, Navbar, Spinner, Authentication],
     encapsulation: ViewEncapsulation.None,
     styles: [require("./application.container.scss")],
@@ -42,15 +44,21 @@ export class WineCellarApp {
     public authentication$: Observable<AuthenticationDataState>;
     public isBusy$: Observable<boolean>;
 
-    constructor(private title: Title, private authenticationEndpoint: AuthenticationEndpoint, private store: Store<ApplicationState>) {
+    constructor(private title: Title, private authenticationEndpoint: AuthenticationEndpoint, private store: Store<ApplicationState>, private wineEndpoint: WineEndpoint) {
         this.title.setTitle("Winecellar application");
         this.authenticationEndpoint.checkInitialAuthentication();
         this.authentication$ = this.store.select((state: ApplicationState) => state.data.authentication);
         this.isBusy$ = this.store.select((state: ApplicationState) => state.containers.application.isBusy);
-    }
 
+        this.authentication$.subscribe((state: AuthenticationDataState) => {
+            if (state.isAuthenticated) {
+                this.wineEndpoint.load();
+            }
+        });
+    }
 
     public logout(): void {
         this.authenticationEndpoint.logout();
     }
+
 }
